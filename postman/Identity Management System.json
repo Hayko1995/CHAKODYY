@@ -1,0 +1,1204 @@
+{
+	"info": {
+		"_postman_id": "bc01ae54-13db-4c38-b1e5-f9dac7f5a32c",
+		"name": "Identity Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7442233"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "OAuth2Google",
+					"item": [
+						{
+							"name": "google get keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"var jsonData = pm.response.json();",
+											"let auth_url = jsonData.authorization_url",
+											"",
+											"",
+											"auth_url = auth_url.replace('=https', '=http')",
+											"",
+											"// Copy this auth_url when testing on localhost since the URL returned from this request has HTTPS which doesnt correspond your HTTP://localhost",
+											"console.log('auth_url', auth_url)",
+											"",
+											"// Setting global state code for request nr3",
+											"auth_url = auth_url.split('&state=')[1]",
+											"state = auth_url.split('&response_type')[0]",
+											"pm.globals.set(\"state\", state);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/?redirect_uri=http://localhost:8000/accounts/profile/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"auth",
+										"social",
+										"o",
+										"google-oauth2",
+										""
+									],
+									"query": [
+										{
+											"key": "redirect_uri",
+											"value": "http://localhost:8000/accounts/profile/"
+										}
+									]
+								},
+								"description": "This is endpoint that returns full URL for accessing Google OAuth panel with user login. For this to work you need to fill ClientID and Secret into your Django app (get it from google developers console)"
+							},
+							"response": [
+								{
+									"name": "1_GoogleObtainRedirectURLDjoser",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/?redirect_uri=http://localhost:8000/accounts/profile/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"auth",
+												"social",
+												"o",
+												"google-oauth2",
+												""
+											],
+											"query": [
+												{
+													"key": "redirect_uri",
+													"value": "http://localhost:8000/accounts/profile/"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Fri, 24 Jul 2020 19:15:47 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.7.7"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Cookie, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, POST, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Content-Length",
+											"value": "286"
+										},
+										{
+											"key": "Set-Cookie",
+											"value": "sessionid=ksgsytsuh0ahu8y9rhvc8cj7u311tm7j; expires=Fri, 07 Aug 2020 19:15:47 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"authorization_url\": \"https://accounts.google.com/o/oauth2/auth?client_id=766209703969-0kgrr4qrmorjkmpi4lna1n8pr51kurjp.apps.googleusercontent.com&redirect_uri=http://localhost:8000/accounts/profile/&state=MXKlZz97MolBH1wg8tCUBEFhxMyqULKF&response_type=code&scope=openid+email+profile\"\n}"
+								}
+							]
+						},
+						{
+							"name": "google Login with keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var jsonData = pm.response.json();",
+											"pm.globals.set(\"authorization_url\", jsonData.authorization_url);",
+											"console.log(`authorization_url :  ${jsonData.authorization_url}`)",
+											"",
+											"",
+											"const jsonDataToken = JSON.parse(responseBody);",
+											"const payload = jsonDataToken.access.split('.')[1];  ",
+											"const parsed = JSON.parse(atob(payload));",
+											"console.log(parsed)",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "code",
+											"value": "READ_DESCRIPTION_ABOVE",
+											"type": "text"
+										},
+										{
+											"key": "state",
+											"value": "{{state}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"auth",
+										"social",
+										"o",
+										"google-oauth2",
+										""
+									]
+								},
+								"description": "Copy code that google returns to ObtainUserFromGoogle URL (shows up in browser and console) and execute to get token. With this token you can access user's information and other protected endpoints."
+							},
+							"response": [
+								{
+									"name": "GoogleCreateTokenDjoser",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "code",
+													"value": "THIS_GET_FROM_REDIRECT_URL",
+													"type": "text"
+												},
+												{
+													"key": "state",
+													"value": "{{state}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"auth",
+												"social",
+												"o",
+												"google-oauth2",
+												""
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Fri, 24 Jul 2020 19:16:03 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.7.7"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Cookie, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, POST, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Content-Length",
+											"value": "466"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"access\": \"eyJ0eXAi324hbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWN2134532joxNTk1NjIxMTYzLCJqdGkiOiJlZTRjMjcxYWNkOTY0M2M3OWMzY2VkNjUzNmVhMTI4YiIsInVzZXJfaWQiOjJ9.ysXoKrZh_Q3yb6aBl5GMQvPrC3AslHLFJvq-bqwtAuI\",\n    \"refresh\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90e234531234zaCIsImV4cCI6MTU5NTcwNDU2MywianRpIjoiMzMwOGU2NmM5ZjExNDZiZmI3ZGQzZmEzMDgxNjZhZWUiLCJ1c2VyX2lkIjoyfQ.2ORUur2dxwQ_ULiBvQrvpY2134BBo7tXakM\",\n    \"user\": \"email@gmail.com\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "facebook",
+					"item": [
+						{
+							"name": "facebook get Keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"var jsonData = pm.response.json();",
+											"let auth_url = jsonData.authorization_url",
+											"",
+											"",
+											"auth_url = auth_url.replace('=https', '=http')",
+											"",
+											"// Copy this auth_url when testing on localhost since the URL returned from this request has HTTPS which doesnt correspond your HTTP://localhost",
+											"console.log('auth_url', auth_url)",
+											"",
+											"// Setting global state code for request nr3",
+											"auth_url = auth_url.split('&state=')[1]",
+											"state = auth_url.split('&response_type')[0]",
+											"pm.globals.set(\"state\", state);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/?redirect_uri=http://localhost:8000/accounts/profile/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"auth",
+										"social",
+										"o",
+										"google-oauth2",
+										""
+									],
+									"query": [
+										{
+											"key": "redirect_uri",
+											"value": "http://localhost:8000/accounts/profile/"
+										}
+									]
+								},
+								"description": "This is endpoint that returns full URL for accessing Google OAuth panel with user login. For this to work you need to fill ClientID and Secret into your Django app (get it from google developers console)"
+							},
+							"response": [
+								{
+									"name": "1_GoogleObtainRedirectURLDjoser",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/?redirect_uri=http://localhost:8000/accounts/profile/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"auth",
+												"social",
+												"o",
+												"google-oauth2",
+												""
+											],
+											"query": [
+												{
+													"key": "redirect_uri",
+													"value": "http://localhost:8000/accounts/profile/"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Fri, 24 Jul 2020 19:15:47 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.7.7"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Cookie, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, POST, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Content-Length",
+											"value": "286"
+										},
+										{
+											"key": "Set-Cookie",
+											"value": "sessionid=ksgsytsuh0ahu8y9rhvc8cj7u311tm7j; expires=Fri, 07 Aug 2020 19:15:47 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"authorization_url\": \"https://accounts.google.com/o/oauth2/auth?client_id=766209703969-0kgrr4qrmorjkmpi4lna1n8pr51kurjp.apps.googleusercontent.com&redirect_uri=http://localhost:8000/accounts/profile/&state=MXKlZz97MolBH1wg8tCUBEFhxMyqULKF&response_type=code&scope=openid+email+profile\"\n}"
+								}
+							]
+						},
+						{
+							"name": "facebook login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var jsonData = pm.response.json();",
+											"pm.globals.set(\"authorization_url\", jsonData.authorization_url);",
+											"console.log(`authorization_url :  ${jsonData.authorization_url}`)",
+											"",
+											"",
+											"const jsonDataToken = JSON.parse(responseBody);",
+											"const payload = jsonDataToken.access.split('.')[1];  ",
+											"const parsed = JSON.parse(atob(payload));",
+											"console.log(parsed)",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "code",
+											"value": "READ_DESCRIPTION_ABOVE",
+											"type": "text"
+										},
+										{
+											"key": "state",
+											"value": "{{state}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"auth",
+										"social",
+										"o",
+										"google-oauth2",
+										""
+									]
+								},
+								"description": "Copy code that google returns to ObtainUserFromGoogle URL (shows up in browser and console) and execute to get token. With this token you can access user's information and other protected endpoints."
+							},
+							"response": [
+								{
+									"name": "GoogleCreateTokenDjoser",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "code",
+													"value": "THIS_GET_FROM_REDIRECT_URL",
+													"type": "text"
+												},
+												{
+													"key": "state",
+													"value": "{{state}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://localhost:8000/api/auth/social/o/google-oauth2/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"auth",
+												"social",
+												"o",
+												"google-oauth2",
+												""
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Fri, 24 Jul 2020 19:16:03 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.7.7"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Cookie, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, POST, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Content-Length",
+											"value": "466"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"access\": \"eyJ0eXAi324hbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWN2134532joxNTk1NjIxMTYzLCJqdGkiOiJlZTRjMjcxYWNkOTY0M2M3OWMzY2VkNjUzNmVhMTI4YiIsInVzZXJfaWQiOjJ9.ysXoKrZh_Q3yb6aBl5GMQvPrC3AslHLFJvq-bqwtAuI\",\n    \"refresh\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90e234531234zaCIsImV4cCI6MTU5NTcwNDU2MywianRpIjoiMzMwOGU2NmM5ZjExNDZiZmI3ZGQzZmEzMDgxNjZhZWUiLCJ1c2VyX2lkIjoyfQ.2ORUur2dxwQ_ULiBvQrvpY2134BBo7tXakM\",\n    \"user\": \"email@gmail.com\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExMTg1MzIyLCJpYXQiOjE3MTExODIzMjIsImp0aSI6Ijk3ZjAyYzQyNWE4MDRjNzI5OWRmYmMyMGNiNmUwNWEzIiwidXNlcl9pZCI6MX0.6HUJzNcak4XjLDxMeDcLClSYcORBaP0sbsoajQxJKXM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "Admin1234!!",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "Lillie41@email.local",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}api/auth/users/me/",
+							"host": [
+								"{{LH_URL}}api"
+							],
+							"path": [
+								"auth",
+								"users",
+								"me",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "Danyka68@email.local",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin1234!!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}auth/jwt/create/",
+							"host": [
+								"{{LH_URL}}auth"
+							],
+							"path": [
+								"jwt",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePass",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "Danyka68@email.local",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin1234!!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}auth/jwt/create/",
+							"host": [
+								"{{LH_URL}}auth"
+							],
+							"path": [
+								"jwt",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"new user with username created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.email.length).to.be.above(1);",
+									"    pm.globals.set(\"userEmail\", jsonData.email);",
+									"    pm.globals.set(\"userNickname\", jsonData.email.split('@')[0]);",
+									"    pm.globals.set(\"user_id\", jsonData.id);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "{{$randomUserName}}@email.local",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin1234!!",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}api/auth/users/",
+							"host": [
+								"{{LH_URL}}api"
+							],
+							"path": [
+								"auth",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"new user with username created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.email.length).to.be.above(1);",
+									"    pm.globals.set(\"userEmail\", jsonData.email);",
+									"    pm.globals.set(\"userNickname\", jsonData.email.split('@')[0]);",
+									"    pm.globals.set(\"user_id\", jsonData.id);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExMjExMzg4LCJpYXQiOjE3MTEyMDgzODgsImp0aSI6IjE4M2Q1NGViZjlhMTRkMjQ5MmIzZjA0MjU0NzBjZjIyIiwidXNlcl9pZCI6MiwidXVpZCI6ImRiMWE2YWJjLWUwY2QtNGU3ZS1iYjA4LWMyYWIzNGVmNmM5YiJ9.vOXWpq64im3ppHS9B5O7WAzCMg0ECCcUq7zTlCCXXWI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "refresh",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcxMTI5NDc4OCwiaWF0IjoxNzExMjA4Mzg4LCJqdGkiOiJkMmRiNjgzNTAyY2Y0ZDNhYThkNzY2NDFjZGViNzdhZSIsInVzZXJfaWQiOjIsInV1aWQiOiJkYjFhNmFiYy1lMGNkLTRlN2UtYmIwOC1jMmFiMzRlZjZjOWIifQ.sVOVpTw6YWBU2zToiPvvyqTrw20qg42lCf5tx89LQfk",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}logout/",
+							"host": [
+								"{{LH_URL}}logout"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"new user with username created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.email.length).to.be.above(1);",
+									"    pm.globals.set(\"userEmail\", jsonData.email);",
+									"    pm.globals.set(\"userNickname\", jsonData.email.split('@')[0]);",
+									"    pm.globals.set(\"user_id\", jsonData.id);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExNTU0NjIzLCJpYXQiOjE3MTE1NTQzMjMsImp0aSI6ImViNjk1M2U1NGRhYjRiYWY4NDI1MGVjMGMyNDY4ZDczIiwidXNlcl9pZCI6MX0.VBklnCdfje2DRwksKyhPe_UFz85qUIrdwCeiR-GHYKM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "Earlene62@email.local",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin1234!!",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}updateUser/",
+							"host": [
+								"{{LH_URL}}updateUser"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blog",
+			"item": [
+				{
+					"name": "createAction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "action3",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "{{$randomAdjective}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}blog/actions/create",
+							"host": [
+								"{{LH_URL}}blog"
+							],
+							"path": [
+								"actions",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createRoles",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "actions",
+									"value": "{{$randomAdjective}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}roles/create",
+							"host": [
+								"{{LH_URL}}roles"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createGroups",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "actions",
+									"value": "{{$randomAdjective}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}roles/create",
+							"host": [
+								"{{LH_URL}}roles"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createProject",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "{{$randomAdjective}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{$randomAdjective}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}blog/projects/create",
+							"host": [
+								"{{LH_URL}}blog"
+							],
+							"path": [
+								"projects",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getblog",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "{{$randomAdjective}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{$randomAdjective}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LH_URL}}blog/get",
+							"host": [
+								"{{LH_URL}}blog"
+							],
+							"path": [
+								"get"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.globals.set(\"LH_URL\", \"http://localhost:8000/\");"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

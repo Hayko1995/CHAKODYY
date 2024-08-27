@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg-dataset:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./app
+    container_name: backend
+    command: sh -c "python manage.py makemigrations && python manage.py makemigrations accounts && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  # nginx:
+  #   restart: unless-stopped
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/nginx/Dockerfile
+  #   container_name: frontend
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     # - static_volume:/app/backend/server/django_static
+  #     - ./docker/nginx/development:/etc/nginx/conf.d
+  #   depends_on:
+  #     - backend
+
+volumes:
+  pg-dataset:
