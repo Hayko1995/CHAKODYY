@@ -38,7 +38,6 @@ class CreateRolesSerializer(serializers.ModelSerializer):
         try:
             roles = Roles.objects.create(name=attrs['name'], actions_id=roleId)
         except Exception as e:
-            print(e)
             return "item exist"
 
         roles.save()
@@ -102,7 +101,6 @@ class BlogGetSerializer(serializers.ModelSerializer):
             except Exception as e:
                 pass
             try:
-                print(roles[0])
                 group = Groups.objects.filter(roles=roles[0]['id']).values()
                 groups = []
                 for i in group:

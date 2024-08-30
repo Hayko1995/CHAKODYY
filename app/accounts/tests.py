@@ -22,6 +22,5 @@ class APITest(APITestCase):
            '/auth/jwt/create/',
             {"email": "example@gmail.com", "password": "Admin123!@#"},
         )
-        print(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.assertEqual(response.data[username], 'username')

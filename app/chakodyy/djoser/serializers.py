@@ -7,8 +7,6 @@ class CustomUserSerializer(BaseUserSerializer):
             'email',
             'first_name',
             'last_name',
-            'address',
-            'country',
             'phone',
             'role'
             )

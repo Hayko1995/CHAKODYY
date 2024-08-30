@@ -10,12 +10,17 @@ class UpdateUserInfo(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name',
-                  'last_name', 'address', 'city', 'country', 'phone']
-        extra_kwargs = {'email': {'required': True}}
+        fields = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "phone",
+        ]
+        extra_kwargs = {"email": {"required": True}}
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        email = attrs.get("email")
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
             user.username = attrs.get("username")
@@ -23,9 +28,6 @@ class UpdateUserInfo(serializers.ModelSerializer):
             user.last_name = attrs.get("last_name")
             user.first_name = attrs.get("first_name")
             user.last_name = attrs.get("last_name")
-            user.address = attrs.get("address")
-            user.city = attrs.get("city")
-            user.country = attrs.get("country")
             user.phone = attrs.get("phone")
             user.save()
         return attrs
@@ -36,22 +38,19 @@ class TokenObtainSerializer(TokenObtainPairSerializer):
 
     class Meta:
         model = User
-        fields = ['username']
+        fields = ["username"]
 
     def validate(self, data):
-        if not ('@' in data.get('email')):
+        if not ("@" in data.get("email")):
             try:
-                user = User.objects.get(username=data.get('email'))
+                user = User.objects.get(username=data.get("email"))
                 email = user.email
             except User.DoesNotExist:
                 raise serializers.ValidationError("No such user exists")
         else:
-            email = data.get('email')
+            email = data.get("email")
 
-        credentials = {
-            "email": email,
-            "password": data.get("password")
-        }
+        credentials = {"email": email, "password": data.get("password")}
         data = super().validate(credentials)
 
         return data
@@ -62,23 +61,23 @@ class UpdatePasswordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'password']
-        extra_kwargs = {'email': {'required': True}}
+        fields = ["email", "password"]
+        extra_kwargs = {"email": {"required": True}}
 
     def validate(self, data):
 
-        if not ('@' in data.get('email')):
+        if not ("@" in data.get("email")):
             try:
-                user = User.objects.get(username=data.get('email'))
+                user = User.objects.get(username=data.get("email"))
             except User.DoesNotExist:
                 raise serializers.ValidationError("No such user exists")
         else:
             try:
-                user = User.objects.get(email=data.get('email'))
+                user = User.objects.get(email=data.get("email"))
             except User.DoesNotExist:
                 raise serializers.ValidationError("No such user exists")
 
-        user.set_password(data.get('password'))
+        user.set_password(data.get("password"))
         user.save()
         return data
 

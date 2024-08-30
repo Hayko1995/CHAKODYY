@@ -23,3 +23,7 @@ django-two-factor-auth==1.16.0
 django-phonenumbers==1.0.1
 Pillow==10.2.0
 drf-yasg
+channels
+daphne
+channels-redis
+websocket-client

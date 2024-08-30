@@ -20,7 +20,7 @@ services:
     build:
       context: ./app
     container_name: backend
-    command: sh -c "python manage.py makemigrations && python manage.py makemigrations accounts && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py makemigrations && python manage.py makemigrations accounts && python manage.py makemigrations app && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./app:/app
     ports:
@@ -44,5 +44,10 @@ services:
   #   depends_on:
   #     - backend
 
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    ports:
+      - "6380:6379"
 volumes:
   pg-dataset:

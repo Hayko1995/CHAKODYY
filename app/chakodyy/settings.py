@@ -36,7 +36,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',              # I always put it first here and in Middleware!
+    'corsheaders',# I always put it first here and in Middleware!
+    "daphne",
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     # Project apps:
     'accounts',
     'blog',
+    'app',
 
     'rest_framework_simplejwt.token_blacklist',
 
@@ -60,9 +62,7 @@ INSTALLED_APPS = [
 
     "drf_yasg",
     'django_otp',
-    'django_otp.plugins.otp_totp',
-
-
+    'django_otp.plugins.otp_totp', 
 ]
 
 MIDDLEWARE = [
@@ -110,7 +110,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'chakodyy.wsgi.application'
+# WSGI_APPLICATION = 'chakodyy.wsgi.application'
+
+# Channels
+ASGI_APPLICATION = "chakodyy.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 
 # Database

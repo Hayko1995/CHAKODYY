@@ -10,7 +10,6 @@ class ObtainUserFromGoogle(View):
     def get(self, request, *args, **kwargs):
         code, state = str(request.GET['code']), str(request.GET['state'])
         json_obj = {'code': code, 'state': state}
-        print(json_obj)
         return JsonResponse(json_obj)
 
     # def get_context_data(self, **kwargs):
@@ -23,7 +22,6 @@ class CustomBaseOAuth(BaseOAuth2):
     def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Return access_token, token_type, and extra defined names to store in
             extra_data field"""
-        print("///////////////////////////////////////")
         data = super(BaseOAuth2, self).extra_data(user, uid, response,
                                                   details=details,
                                                   *args, **kwargs)
@@ -73,9 +71,7 @@ class CustomGoogleOAuth2(BaseGoogleOAuth2API, CustomBaseOAuth):
             response.get('family_name', ''),
         )
         print("""
-        {}
-
-        """.format(response))
+        {}      """.format(response))
         for key, value in response.items():
             print(key, value)
         fullname, first_name, last_name = self.get_user_names(
@@ -109,4 +105,4 @@ class FacebookOAuth2Override(FacebookAppOAuth2, CustomBaseOAuth):
     ],
 
     def get_user_details(self, response):
-        print("aaaaaaaaaaaaaaaa")
+        pass
