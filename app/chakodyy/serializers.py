@@ -11,7 +11,6 @@ class UpdateUserInfo(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "username",
             "email",
             "first_name",
             "last_name",
@@ -23,7 +22,6 @@ class UpdateUserInfo(serializers.ModelSerializer):
         email = attrs.get("email")
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
-            user.username = attrs.get("username")
             user.email = attrs.get("email")
             user.last_name = attrs.get("last_name")
             user.first_name = attrs.get("first_name")
@@ -38,13 +36,12 @@ class TokenObtainSerializer(TokenObtainPairSerializer):
 
     class Meta:
         model = User
-        fields = ["username"]
 
     def validate(self, data):
         if not ("@" in data.get("email")):
             try:
-                user = User.objects.get(username=data.get("email"))
-                email = user.email
+                # user = User.objects.get(username=data.get("email"))
+                email = 'user.email'
             except User.DoesNotExist:
                 raise serializers.ValidationError("No such user exists")
         else:
@@ -68,7 +65,7 @@ class UpdatePasswordSerializer(serializers.ModelSerializer):
 
         if not ("@" in data.get("email")):
             try:
-                user = User.objects.get(username=data.get("email"))
+                user = 'User.objects.get(username=data.get("email"))'
             except User.DoesNotExist:
                 raise serializers.ValidationError("No such user exists")
         else:

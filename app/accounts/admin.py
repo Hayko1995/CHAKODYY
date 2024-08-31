@@ -2,8 +2,6 @@ from .models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib import admin
-from django.contrib.gis.db import models
-from django.contrib import admin
 from django_otp.admin import OTPAdminSite
 
 
@@ -16,7 +14,7 @@ class UserAdmin(DjangoUserAdmin):
         (None, {"fields": ("email", "password")}),
         (
             _("Personal info"),
-            {"fields": ("first_name", "last_name", "phone", "role")},
+            {"fields": ("first_name", "last_name", "phone", "role", 'coins')},
         ),
     )
     add_fieldsets = (
