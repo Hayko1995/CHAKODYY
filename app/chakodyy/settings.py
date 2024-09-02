@@ -17,13 +17,13 @@ from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = "accounts.User"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'yr)kvt0!jfel9d)_5)(5%=t#p2(z3c@x-fvpdm8_#+2mv559&^'
+SECRET_KEY = "yr)kvt0!jfel9d)_5)(5%=t#p2(z3c@x-fvpdm8_#+2mv559&^"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,75 +36,68 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',# I always put it first here and in Middleware!
+    "django.contrib.auth",
+    "corsheaders",  # I always put it first here and in Middleware!
     "daphne",
-    'django.contrib.sites',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
+    "django.contrib.sites",
+    "django.contrib.admin",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     # Project apps:
-    'accounts',
-    'blog',
-    'app',
-
-    'rest_framework_simplejwt.token_blacklist',
-
-    # 3rd party apps               # The app we have created for extending User model
-    'rest_framework',
-    'djoser',
-    'social_django',          # Not needed, is installed when adding Djoser
-    'rest_framework_simplejwt',
-    # Add it in case of problems with migrations
+    "accounts",
+    "blog",
     "coin",
-    "drf_yasg",
-    'django_otp',
-    'django_otp.plugins.otp_totp', 
+    "app",
+    "rest_framework_simplejwt.token_blacklist",
+    # 3rd party apps               # The app we have created for extending User model
+    "rest_framework",
+    "rest_framework.authtoken",
+    "djoser",
+    "social_django",  # Not needed, is installed when adding Djoser
+    "rest_framework_simplejwt",
+    # Add it in case of problems with migrations
+    "django_otp",
+    "django_otp.plugins.otp_totp",
 ]
 
 MIDDLEWARE = [
     # IMPORTANT: CORS policies has to go before other entries
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     # IMPORTANT: Essential when using django_social
-    'social_django.middleware.SocialAuthExceptionMiddleware',
-
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-
-    'django_otp.middleware.OTPMiddleware',
-
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "social_django.middleware.SocialAuthExceptionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django_otp.middleware.OTPMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 
 # LOGIN_URL = 'two_factor:login'
 
 # # this one is optional
-LOGIN_REDIRECT_URL = 'two_factor:profile'
-ROOT_URLCONF = 'chakodyy.urls'
+LOGIN_REDIRECT_URL = "two_factor:profile"
+ROOT_URLCONF = "chakodyy.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 # Crucial for social login to work!
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -140,13 +133,13 @@ CHANNEL_LAYERS = {
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_DATABASE'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': os.environ.get('postgres'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("POSTGRES_DATABASE"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("postgres"),
     }
 }
 
@@ -155,16 +148,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -172,9 +165,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -186,102 +179,110 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
+
+
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": (
+#         "rest_framework_simplejwt.authentication.JWTAuthentication",
+#         (...),
+#     ),
+# }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # OAuth2, JWT
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",  # OAuth2, JWT
+        # "rest_framework.authentication.SessionAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
+    "DEFAULT_PERMISSION_CLASSES": (
         # Up to you to decide, depends on your project. Both IsAuthenticated and AllowAny work fine
-        'rest_framework.permissions.AllowAny',
-    )
+        "rest_framework.permissions.AllowAny",
+    ),
+}
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("JWT",),
 }
 REST_USE_JWT = True
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
-
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUDIENCE': None,
-    'ISSUER': None,
-
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-
-    'AUTH_TOKEN_CLASSES': (
-        'rest_framework_simplejwt.tokens.AccessToken',
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": None,
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "AUTH_HEADER_TYPES": (
+        "Bearer",
+        "JWT",
+    ),
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "AUTH_TOKEN_CLASSES": (
+        "rest_framework_simplejwt.tokens.AccessToken",
         # 'SocialDjango.token.CustomJWTToken'
     ),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-
-    'JTI_CLAIM': 'jti',
-
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=500),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "JTI_CLAIM": "jti",
+    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=500),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
 AUTHENTICATION_BACKENDS = (
-
     # Important for accessing admin with django_social
     # 'social_core.backends.google.GoogleOAuth2',
-    'chakodyy.oauth.google.CustomGoogleOAuth2',  # Optional in case
-    'django.contrib.auth.backends.ModelBackend',
+    "chakodyy.oauth.google.CustomGoogleOAuth2",  # Optional in case
+    "django.contrib.auth.backends.ModelBackend",
     "djoser.social.backends.facebook.FacebookOAuth2Override",
     # "chakodyy.oauth.facebook.FacebookOAuth2Override",
 )
 
 # social_django (social-auth-app-django)
 # obtained from google developers console
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
 # obtained from google developers console
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get(
-    'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['picture', 'uuid']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ["picture", "uuid"]
 # has to be the same as redirect URL on google developers console for Google OAuth2
-white_list = ['http://localhost:8000/accounts/profile/']
+white_list = ["http://localhost:8000/accounts/profile/"]
 
 # Facebook
-SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('SOCIAL_AUTH_FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('SOCIAL_AUTH_FACEBOOK_SECRET')
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get("SOCIAL_AUTH_FACEBOOK_KEY")
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get("SOCIAL_AUTH_FACEBOOK_SECRET")
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"
 
 # Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook. Email is not sent by default, to get it, you must request the email permission:
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'}
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-FACEBOOK_EXTENDED_PERMISSIONS = ['email']
-SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'email']
-ACCOUNT_USERNAME_REQUIRED  = False
+SOCIAL_AUTH_FACEBOOK_SCOPE = ["email"]
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {"fields": "id, name, email"}
+SOCIAL_AUTH_FACEBOOK_SCOPE = ["email"]
+FACEBOOK_EXTENDED_PERMISSIONS = ["email"]
+SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ["first_name", "email"]
+ACCOUNT_USERNAME_REQUIRED = False
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_PASSWORD_MIN_LENGTH = 8
 
 SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.social_auth.associate_by_email',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details', )
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.social_auth.associate_by_email",
+    "social_core.pipeline.user.create_user",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+)
 
 
 # Fields that get saved in JSON string along with the token
@@ -295,12 +296,12 @@ SOCIAL_AUTH_PIPELINE = (
 
 DJOSER = {
     "LOGIN_FIELD": "email",
-    'SERIALIZERS': {
-        'user': 'chakodyy.djoser.serializers.CustomUserSerializer',
-        'current_user': 'chakodyy.djoser.serializers.CustomUserSerializer',
+    "SERIALIZERS": {
+        "user": "chakodyy.djoser.serializers.CustomUserSerializer",
+        "current_user": "chakodyy.djoser.serializers.CustomUserSerializer",
     },
     # Essential for obtaining redirect_uri
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': white_list
+    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": white_list,
 }
 
 # SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/' # Optional
@@ -313,4 +314,5 @@ DJOSER = {
 # CORS_ORIGIN_ALLOW_ALL = True
 
 SITE_ID = 1
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+

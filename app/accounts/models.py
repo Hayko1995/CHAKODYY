@@ -8,7 +8,7 @@ import uuid as generateUUID
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from coin.models import Coin
+from coin.models import CoinCount
 
 
 class UserManager(BaseUserManager):
@@ -64,7 +64,7 @@ class User(AbstractUser):
     role = models.PositiveSmallIntegerField(
         choices=ROLE_CHOICES, blank=True, default=USER
     )
-    coin = models.ManyToManyField(Coin, blank=True)
+    coin = models.ManyToManyField(CoinCount, blank=True)
 
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
     unique_id = models.UUIDField(
